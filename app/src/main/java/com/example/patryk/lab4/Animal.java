@@ -1,3 +1,5 @@
+package com.example.patryk.lab4;
+
 import java.io.Serializable;
 
 public class Animal implements Serializable {

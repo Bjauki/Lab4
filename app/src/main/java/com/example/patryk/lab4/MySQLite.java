@@ -1,10 +1,10 @@
+package com.example.patryk.lab4;
+
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 
 public class MySQLite extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -69,5 +69,10 @@ public class MySQLite extends SQLiteOpenHelper {
         zwierz.setId(Integer.parseInt(cursor.getString(0)));
 
         return zwierz;
+    }
+
+    public Cursor lista(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("Select * from animals", null);
     }
 }
