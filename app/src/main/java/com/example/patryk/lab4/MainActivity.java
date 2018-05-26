@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db = new MySQLite(this);
         setContentView(R.layout.activity_main);
         String[] values = new String[] {"Pies","Kot","Koń","Ptak","Ryba"};
         this.target = new ArrayList<String>();
