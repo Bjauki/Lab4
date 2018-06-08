@@ -1,8 +1,11 @@
 package com.example.patryk.lab4;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> target;
     private SimpleCursorAdapter adapter;
     private MySQLite db;
+    //public int kasuj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
                 Intent intencja = new Intent(getApplicationContext(), DodajWpis.class);
                 intencja.putExtra("element", zwierz);
                 startActivityForResult(intencja, 2);
+            }
+        });
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos, long id) {
+                TextView name = (TextView)view.findViewById(android.R.id.text1);
+                Log.d("name1", name.getText().toString());
+                db.usun(name.getText().toString());
+                Intent intencja =  new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(intencja, 3);
+                return true;
             }
         });
     }
@@ -68,12 +82,25 @@ public class MainActivity extends AppCompatActivity {
 
             Bundle extras = data.getExtras();
             Animal nowy = (Animal)extras.getSerializable("nowy");
-            //String nowy = (String)extras.get("wpis");
-            //target.add(nowy);
-            this.db.aktualizuj(nowy);
             this.db.dodaj(nowy);
+            //this.db.usun();
             adapter.changeCursor(db.lista());
             adapter.notifyDataSetChanged();
+        }
+        if(requestCode==2 && resultCode==RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            Animal nowy = (Animal)extras.getSerializable("nowy");
+            this.db.aktualizuj(nowy);
+            // this.db.usun();
+            adapter.changeCursor(db.lista());
+            adapter.notifyDataSetChanged();
+        }
+        if(requestCode==3 && resultCode==RESULT_OK)
+        {
+            adapter.changeCursor(db.lista());
+            adapter.notifyDataSetChanged();
+            Log.d("delete", "usuwanie");
         }
     }
 }
